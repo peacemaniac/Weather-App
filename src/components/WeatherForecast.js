@@ -1,39 +1,77 @@
-import weatherIcon from "../assets/openweathericons/04d.svg";
+function getTime(date) {
+  const timeOptions = {
+    hour: "2-digit", // HH
+    minute: "2-digit", // MM
+    dayPeriod: "short", // AM/PM
+  };
 
-export default function WeatherForecast() {
+  let readable = date.toLocaleTimeString(undefined, timeOptions);
+  let dateTime = date.getHours() + ":" + date.getMinutes(); // 24-hour time for dateTime
+
+  return { readable, dateTime };
+}
+
+function getDate(date) {
+  const dateOptions = {
+    weekday: "short", // Mon, Tue, Wed, ...
+    month: "long", // January, February, ...
+    day: "numeric", // 1, 2, 3, 4, ...
+  };
+
+  let readable = date.toLocaleDateString(undefined, dateOptions);
+  let dateTime = date.toISOString().split("T")[0]; // "YYYY-MM-DD" format for dateTime
+
+  return { readable, dateTime };
+}
+
+export default function WeatherForecast({
+  humidity,
+  location,
+  pressure,
+  sunset,
+  temperature,
+  weatherIcon,
+  weatherType,
+  windSpeed,
+}) {
   return (
     <article className="forecast">
       <div className="main">
         <div className="info">
-          <p className="location">London, UK</p>
-          <time dateTime="2023-02-08" className="date">
-            Wed, 8 February
+          <p className="location">{location}</p>
+          <time dateTime={getDate(new Date()).dateTime} className="date">
+            {getDate(new Date()).readable}
           </time>
-          <p className="conditions">Clouds</p>
+          <p className="conditions">{weatherType}</p>
         </div>
         <div className="temperature">
-          <img src={weatherIcon} alt="" />
-          <p>2°</p>
+          <img
+            src={require(`../assets/openweathericons/${weatherIcon}.svg`)}
+            alt=""
+          />
+          <p>{Math.round(temperature)}</p>
         </div>
       </div>
       <dl>
         <div className="additional-info">
           <dt>Sunset</dt>
           <dd>
-            <time dateTime="22:31">10:31PM</time>
+            <time dateTime={getTime(new Date(sunset)).dateTime}>
+              {getTime(new Date(sunset * 1000)).readable}
+            </time>
           </dd>
         </div>
         <div className="additional-info">
           <dt>Humidity</dt>
-          <dd>85%</dd>
+          <dd>{humidity}</dd>
         </div>
         <div className="additional-info">
           <dt>Pressure</dt>
-          <dd>1031</dd>
+          <dd>{pressure}</dd>
         </div>
         <div className="additional-info">
           <dt>Wind speed</dt>
-          <dd>2.57km/h</dd>
+          <dd>{windSpeed}</dd>
         </div>
       </dl>
     </article>

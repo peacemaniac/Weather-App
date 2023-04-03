@@ -6,7 +6,7 @@ export default function Home() {
 
   const getWeatherInfo = async () => {
     try {
-      let url = `https://api.openweathermap.org/data/2.5/weather?q=${searchTerm}&appid=${process.env.REACT_APP_OPEN_WEATHER_KEY}`;
+      let url = `https://api.openweathermap.org/data/2.5/weather?q=${searchTerm}&appid=${process.env.REACT_APP_OPEN_WEATHER_KEY}&units=metric`;
 
       let res = await fetch(url);
       let data = await res.json();
@@ -16,7 +16,7 @@ export default function Home() {
       const newWeatherInfo = {
         humidity: main.humidity,
         location: `${name}, ${sys.country}`,
-        presssure: main.pressure,
+        pressure: main.pressure,
         sunset: sys.sunset,
         temperature: main.temp,
         weatherIcon: weather[0].icon,
@@ -45,7 +45,7 @@ export default function Home() {
           Search
         </button>
       </form>
-      {weatherInfo && <WeatherForecast />}
+      {weatherInfo && <WeatherForecast {...weatherInfo} />}
     </>
   );
 }
